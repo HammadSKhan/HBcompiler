@@ -5,14 +5,16 @@ public class LexicalAnalyzer {
     public int currentPointer;
     public int currentLine;
 
+    public SymbolTable symbolTable;
+
     public LexicalAnalyzer(String inputText) {
         this.inputText = inputText;
         this.currentPointer = 0;
         this.currentLine = 1;
+        this.symbolTable = new SymbolTable();
     }
 
     public String analyze() throws LexicalException {
-
         getNextToken();
         return "";
     }
@@ -35,28 +37,45 @@ public class LexicalAnalyzer {
             case "while":
                 return new Token(TokenName.WHILE);
             default:
-                // if (lexeme) {
-
-                // }
-
-                break;
+                if (Helpers.isInteger(lexeme)) {
+                    return new Token(TokenName.IV, lexeme);
+                } else if (Helpers.isStringLiteral(lexeme)) {
+                    return new Token(TokenName.SL, lexeme);
+                } else {
+                    return new Token(TokenName.ID, lexeme);
+                }
+//               else{
+//                  throw new LexicalException(inputText, currentPointer);
+//               }
         }
+    }
+
+
+    Token getNextToken() throws LexicalException {
+        char c = nextChar();
+
+        if(c == ' ') {
+
+        }
+
+
         throw new LexicalException(inputText, currentPointer);
     }
 
-    Token getNextToken() throws LexicalException {
-        while (true) {
-            char currentChar = inputText.charAt(currentPointer);
-            //Will return some token
-            switch (currentChar) {
-                // This will have all our token recognition transition stufff ?????
-                case '1':
-                    return new Token(TokenName.AOP, "asd");
-                default:
-                    break;
-            }
+    char nextChar() {
+        char currentChar = inputText.charAt(currentPointer);
+        currentPointer++;
+        if(currentChar == '\n') {
+            currentLine++;
         }
-        // throw new LexicalException(inputText, currentPointer);
+        return currentChar;
     }
-
+    char retractChar() {
+        currentPointer--;
+        char currentChar = inputText.charAt(currentPointer);
+        if(currentChar == '\n') {
+            currentLine--;
+        }
+        return currentChar;
+    }
 }

@@ -1,11 +1,12 @@
+import java.util.ArrayList;
+
 public class SymbolTable {
-    private String lexeme;
-    private String tokenName;
-    private String attributeValue;
+    public ArrayList<SymbolTableEntry> entries;
 
-
-
-    public SymbolTable(){
-
+    public SymbolTable() {
+        entries = new ArrayList<SymbolTableEntry>();
     }
+
+
 }
+
