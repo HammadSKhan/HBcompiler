@@ -15,7 +15,13 @@ public class LexicalAnalyzer {
     }
 
     public String analyze() {
-        return getNextToken().toString();
+        StringBuilder stringBuilder = new StringBuilder();
+        Token token = getNextToken();
+        while (token != null) {
+            stringBuilder.append(token + "\n");
+            token = getNextToken();
+        }
+        return stringBuilder.toString();
     }
 
     Token recognizeKeywordAndId(String lexeme) {
@@ -43,11 +49,15 @@ public class LexicalAnalyzer {
 
     Token getNextToken() throws GeneralLexicalException {
         char c = nextChar();
-
+        //Ignore extra spaces
         if (c == ' ') {
             while ((c = nextChar()) == ' ') {
                 //
             }
+        }
+
+        if (c == Helpers.EOF) {
+            return null;
         }
 
         if (c == '\"') {
@@ -70,6 +80,22 @@ public class LexicalAnalyzer {
                 c = nextChar();
             }
             return recognizeKeywordAndId(stringBuilder.toString());
+        }
+
+        if (Helpers.isInteger(c)) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(c);
+            c = nextChar();
+            while (Helpers.isInteger(c)) {
+                stringBuilder.append(c);
+                c = nextChar();
+            }
+            if (!Helpers.isAlpha(c)) {
+//                retractChar();
+                return new Token(TokenName.IV, stringBuilder.toString());
+            } else {
+                throw new GeneralLexicalException(inputText, currentPointer);
+            }
         }
 
         throw new GeneralLexicalException(inputText, currentPointer);
