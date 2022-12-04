@@ -1,16 +1,44 @@
 public class Token {
 
     private TokenName name;
-    private String  value;
 
-    public Token(){
-
+    /**
+     * @return the name
+     */
+    public TokenName getName() {
+        return name;
     }
 
+    private String value;
+
+    /**
+     * @return the value
+     */
+    public String getValue() {
+        return value;
+    }
+
+    public Token(TokenName name) {
+        this.name = name;
+    }
+
+    public Token(TokenName name, String value) {
+        this.name = name;
+        this.value = value;
+    }
+
+    public Token(TokenName name, TokenValue value) {
+        this.name = name;
+        this.value = value.name();
+    }
 }
-enum TokenValue{
-    LE, LT,EQ,NE,GE,GT,AD,SB,ML,DV,AS,OP,CP,OB,CB,TR
+
+enum TokenValue {
+    LE, LT, EQ, NE, GE, GT,
+    AD, SB, ML, DV, AS,
+    OP, CP, OB, CB, TR
 }
-enum TokenName{
-    INT,CHAR,STRING,IF,ELSE,DO,WHILE,ROP,AOP,OOP,ID,SL,IV
+
+enum TokenName {
+    INT, CHAR, STRING, IF, ELSE, DO, WHILE, ROP, AOP, OOP, ID, SL, IV
 }
