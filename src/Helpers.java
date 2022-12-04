@@ -1,4 +1,6 @@
 public class Helpers {
+    public static final char EOF = (char) -1;
+
     public static boolean isInteger(String s) {
         try {
             Integer.parseInt(s);
@@ -13,11 +15,22 @@ public class Helpers {
         return true;
     }
 
-    public static boolean isStringLiteral(String s) {
-        if(s.startsWith("\"") && s.endsWith("\"")) {
-            return true;
-        } else {
+
+    //For Characters
+    public static boolean isInteger(char c) {
+        try {
+            Integer.parseInt(c+"");
+        } catch (Exception e) {
             return false;
         }
+        // only got here if we didn't return false
+        return true;
+    }
+
+    public static boolean isAlpha(char c) {
+        if((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+            return true;
+        }
+        return false;
     }
 }

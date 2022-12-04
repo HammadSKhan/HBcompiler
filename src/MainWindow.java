@@ -1,3 +1,5 @@
+import Exceptions.Lexical.GeneralLexicalException;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,7 +21,7 @@ public class MainWindow extends JFrame{
         lexicalButton.addActionListener(e -> {
             String inputText = codeInputArea.getText();
             LexicalAnalyzer la = new LexicalAnalyzer(inputText);
-            outputArea.setText(inputText);
+            outputArea.setText(la.analyze());
         });
 
         syntacticButton.addActionListener(e -> {

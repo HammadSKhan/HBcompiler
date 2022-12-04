@@ -1,4 +1,4 @@
-import Exceptions.LexicalException;
+import Exceptions.Lexical.GeneralLexicalException;
 
 public class LexicalAnalyzer {
     public final String inputText;
@@ -14,12 +14,11 @@ public class LexicalAnalyzer {
         this.symbolTable = new SymbolTable();
     }
 
-    public String analyze() throws LexicalException {
-        getNextToken();
-        return "";
+    public String analyze() {
+        return getNextToken().toString();
     }
 
-    Token recognizeToken(String lexeme) throws LexicalException {
+    Token recognizeKeywordAndId(String lexeme) {
         //Will return some token
         switch (lexeme.toLowerCase()) { // For case Insensitivity
             case "int":
@@ -37,43 +36,62 @@ public class LexicalAnalyzer {
             case "while":
                 return new Token(TokenName.WHILE);
             default:
-                if (Helpers.isInteger(lexeme)) {
-                    return new Token(TokenName.IV, lexeme);
-                } else if (Helpers.isStringLiteral(lexeme)) {
-                    return new Token(TokenName.SL, lexeme);
-                } else {
-                    return new Token(TokenName.ID, lexeme);
-                }
-//               else{
-//                  throw new LexicalException(inputText, currentPointer);
-//               }
+                return new Token(TokenName.ID, lexeme);
         }
     }
 
 
-    Token getNextToken() throws LexicalException {
+    Token getNextToken() throws GeneralLexicalException {
         char c = nextChar();
 
-        if(c == ' ') {
-
+        if (c == ' ') {
+            while ((c = nextChar()) == ' ') {
+                //
+            }
         }
 
+        if (c == '\"') {
+            StringBuilder stringBuilder = new StringBuilder();
+            while ((c = nextChar()) != '\"') {
+                stringBuilder.append(c);
+            }
+            return new Token(TokenName.SL, "\"" + stringBuilder + "\"");
+        }
 
-        throw new LexicalException(inputText, currentPointer);
+        if (Helpers.isAlpha(c)) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(c);
+            c = nextChar();
+            while (Helpers.isAlpha(c)
+                    || Helpers.isInteger(c)
+                //  || c == '_'
+            ) {
+                stringBuilder.append(c);
+                c = nextChar();
+            }
+            return recognizeKeywordAndId(stringBuilder.toString());
+        }
+
+        throw new GeneralLexicalException(inputText, currentPointer);
     }
 
     char nextChar() {
-        char currentChar = inputText.charAt(currentPointer);
-        currentPointer++;
-        if(currentChar == '\n') {
-            currentLine++;
+        if (currentPointer < inputText.length()) {
+            char currentChar = inputText.charAt(currentPointer);
+            currentPointer++;
+            if (currentChar == '\n') {
+                currentLine++;
+            }
+            return currentChar;
+        } else {
+            return Helpers.EOF;
         }
-        return currentChar;
     }
+
     char retractChar() {
         currentPointer--;
         char currentChar = inputText.charAt(currentPointer);
-        if(currentChar == '\n') {
+        if (currentChar == '\n') {
             currentLine--;
         }
         return currentChar;

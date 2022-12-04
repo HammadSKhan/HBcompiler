@@ -31,6 +31,11 @@ public class Token {
         this.name = name;
         this.value = value.name();
     }
+
+    @Override
+    public String toString() {
+        return "Token {" + "name=" + name +", value='" + value + "\'" +    "}";
+    }
 }
 
 enum TokenValue {
