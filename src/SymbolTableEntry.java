@@ -1,28 +1,28 @@
 public class SymbolTableEntry {
-    private String lexeme;
+    private int attributeValue;
     private String tokenName;
-    private String attributeValue;
+    private String lexemeValue;
 
-    public SymbolTableEntry(String lexeme, String tokenName, String attributeValue) {
-        this.lexeme = lexeme;
+    public SymbolTableEntry(int attributeValue, String tokenName, String lexemeValue) {
+        this.lexemeValue = lexemeValue;
         this.tokenName = tokenName;
         this.attributeValue = attributeValue;
     }
 
-    public SymbolTableEntry(String lexeme, String tokenName) {
-        this.lexeme = lexeme;
-        this.tokenName = tokenName;
-    }
+//    public SymbolTableEntry(int attributeValue, String tokenName) {
+//        this.attributeValue = attributeValue;
+//        this.tokenName = tokenName;
+//    }
 
-    public String getLexeme() {
-        return lexeme;
+    public String getLexemeValue() {
+        return lexemeValue;
     }
 
     public String getTokenName() {
         return tokenName;
     }
 
-    public String getAttributeValue() {
+    int getAttributeValue() {
         return attributeValue;
     }
 }

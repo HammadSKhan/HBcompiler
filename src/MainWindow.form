@@ -8,26 +8,6 @@
     <properties/>
     <border type="none"/>
     <children>
-      <component id="ec821" class="javax.swing.JTextArea" binding="codeInputArea">
-        <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="50"/>
-          </grid>
-        </constraints>
-        <properties>
-          <text value=""/>
-        </properties>
-      </component>
-      <component id="506e7" class="javax.swing.JTextArea" binding="outputArea">
-        <constraints>
-          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="50"/>
-          </grid>
-        </constraints>
-        <properties>
-          <editable value="false"/>
-        </properties>
-      </component>
       <grid id="4033e" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
@@ -69,6 +49,36 @@
           </component>
         </children>
       </grid>
+      <scrollpane id="3e1e2">
+        <constraints>
+          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="506e7" class="javax.swing.JTextArea" binding="outputArea">
+            <constraints/>
+            <properties>
+              <editable value="false"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
+      <scrollpane id="31d7e">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="ec821" class="javax.swing.JTextArea" binding="codeInputArea">
+            <constraints/>
+            <properties>
+              <text value="int val1 = 21; // to store a value&#10;int val2;&#10;int total;&#10;string purpose = &quot;Calculation&quot;; /* to store&#10;calculation */&#10;if ( val1 &gt; 10 ) {&#10;        val2 = 5;&#10;}else {&#10;        val2 = 10;&#10;}&#10;        total = (val1 + val2) * val1;&#10;&#10;"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
     </children>
   </grid>
 </form>

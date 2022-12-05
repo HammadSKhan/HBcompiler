@@ -1,13 +1,11 @@
 import Exceptions.Lexical.GeneralLexicalException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class LexicalAnalyzer {
     public final String inputText;
     public int currentPointer;
     public int currentLine;
-
     public SymbolTable symbolTable;
 
     public LexicalAnalyzer(String inputText) {
@@ -24,6 +22,7 @@ public class LexicalAnalyzer {
             stringBuilder.append(token + "\n");
             System.out.println(" recognized token = " + token);
             token = getNextToken();
+
         }
         return stringBuilder.toString();
     }
@@ -32,21 +31,21 @@ public class LexicalAnalyzer {
         //Will return some token
         switch (lexeme.toLowerCase()) { // For case Insensitivity
             case "int":
-                return new Token(TokenName.INT);
+                return symbolTable.add(new Token(TokenName.INT),lexeme);
             case "char":
-                return new Token(TokenName.CHAR);
+                return symbolTable.add(new Token(TokenName.CHAR),lexeme);
             case "string":
-                return new Token(TokenName.STRING);
+                return symbolTable.add(new Token(TokenName.STRING),lexeme);
             case "if":
-                return new Token(TokenName.IF);
+                return symbolTable.add(new Token(TokenName.IF),lexeme);
             case "else":
-                return new Token(TokenName.ELSE);
+                return symbolTable.add(new Token(TokenName.ELSE),lexeme);
             case "do":
-                return new Token(TokenName.DO);
+                return symbolTable.add(new Token(TokenName.DO),lexeme);
             case "while":
-                return new Token(TokenName.WHILE);
+                return symbolTable.add(new Token(TokenName.WHILE),lexeme);
             default:
-                return new Token(TokenName.ID, lexeme);
+                return symbolTable.add(new Token(TokenName.ID),lexeme);
         }
     }
 
@@ -94,13 +93,8 @@ public class LexicalAnalyzer {
     Token getNextToken() throws GeneralLexicalException {
         char c = nextChar();
         //Ignore extra spaces
-        if (c == ' ' ) {
-            while ((c = nextChar()) == ' ') {
-                //
-            }
-        }
-        if (c == '\n' ) {
-            while ((c = nextChar()) == '\n') {
+        if (c == ' ' || c == '\n') {
+            while ((c = nextChar()) == ' ' || c == '\n') {
                 //
             }
         }
@@ -109,13 +103,37 @@ public class LexicalAnalyzer {
             return null;
         }
 
+        // Read Single Line Multi Line Comments
+        if (c == '/') {
+            c = nextChar();
+            if (c == '/') {
+                while ((c = nextChar()) != '\n') {
+                    //
+                }
+                // Error fix temp: Returning COMMENT Token
+                return new Token(TokenName.COMMENT);
+            } else if (c == '*') {
+                while ((c = nextChar()) != '*' && (c = nextChar()) != '/') {
+                    System.out.println("NEXT CHAR =====" + c);
+                    //
+                }
+                // Error fix temp: read next char if c = new line AND returning COMMENT Token
+                c = nextChar();
+                return new Token(TokenName.COMMENT);
+            } else {
+                throw new GeneralLexicalException(inputText, currentPointer);
+            }
+        }
+
+
         // Token For String Literal
         if (c == '\"') {
             StringBuilder stringBuilder = new StringBuilder();
             while ((c = nextChar()) != '\"') {
                 stringBuilder.append(c);
             }
-            return new Token(TokenName.SL, "\"" + stringBuilder + "\"");
+//            Token tempSlToken= new Token(TokenName.SL, "\"" + stringBuilder + "\"");
+            return symbolTable.add(new Token(TokenName.SL),stringBuilder.toString());
         }
 
         // Token For ID
@@ -125,7 +143,6 @@ public class LexicalAnalyzer {
             c = nextChar();
             while (Helpers.isAlpha(c)
                     || Helpers.isInteger(c)
-                //  || c == '_'
             ) {
                 stringBuilder.append(c);
                 c = nextChar();
@@ -162,7 +179,7 @@ public class LexicalAnalyzer {
             } else if (c == '=') {
                 stringBuilder.append(c);
                 c = nextChar();
-                if (Helpers.isAlpha(c) || Helpers.isInteger(c) || c == ' ') {
+                if (Helpers.isAlpha(c) || Helpers.isInteger(c) || c == ' ' || c == '\n') {
                     retractChar();
                     return recognizeEverythingElse(stringBuilder.toString());
                 }
@@ -176,13 +193,13 @@ public class LexicalAnalyzer {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(c);
             c = nextChar();
-            if (Helpers.isAlpha(c) || Helpers.isInteger(c) || c == ' ') {
+            if (Helpers.isAlpha(c) || Helpers.isInteger(c) || c == ' ' || c == '\n') {
                 retractChar();
                 return recognizeEverythingElse(stringBuilder.toString());
             } else if (c == '=' || c == '>') {
                 stringBuilder.append(c);
                 c = nextChar();
-                if (Helpers.isAlpha(c) || Helpers.isInteger(c) || c == ' ') {
+                if (Helpers.isAlpha(c) || Helpers.isInteger(c) || c == ' ' || c == '\n') {
                     retractChar();
                     return recognizeEverythingElse(stringBuilder.toString());
                 }
@@ -196,13 +213,13 @@ public class LexicalAnalyzer {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(c);
             c = nextChar();
-            if (Helpers.isAlpha(c) || Helpers.isInteger(c) || c == ' ') {
+            if (Helpers.isAlpha(c) || Helpers.isInteger(c) || c == ' ' || c == '\n') {
                 retractChar();
                 return recognizeEverythingElse(stringBuilder.toString());
             } else if (c == '=') {
                 stringBuilder.append(c);
                 c = nextChar();
-                if (Helpers.isAlpha(c) || Helpers.isInteger(c) || c == ' ') {
+                if (Helpers.isAlpha(c) || Helpers.isInteger(c) || c == ' ' || c == '\n') {
                     retractChar();
                     return recognizeEverythingElse(stringBuilder.toString());
                 }
@@ -238,6 +255,8 @@ public class LexicalAnalyzer {
             currentPointer++;
             if (currentChar == '\n') {
                 currentLine++;
+                //testing
+//                currentPointer++;
             }
             return currentChar;
         } else {
@@ -263,7 +282,7 @@ public class LexicalAnalyzer {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(c);
             c = nextChar();
-            if (Helpers.isAlpha(c) || Helpers.isInteger(c) || c == ' ') {
+            if (Helpers.isAlpha(c) || Helpers.isInteger(c) || c == ' ' || c == '\n') {
                 retractChar();
                 return recognizeEverythingElse(stringBuilder.toString());
             } else {
