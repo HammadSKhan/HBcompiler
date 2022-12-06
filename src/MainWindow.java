@@ -22,13 +22,12 @@ public class MainWindow extends JFrame{
         lexicalButton.addActionListener(e ->
         {
             String inputText = codeInputArea.getText();
-            LexicalAnalyzer la = new LexicalAnalyzer(inputText);
-            outputArea.setText(la.analyze());
+            outputArea.setText(Compiler.runLexicalAnalyzer(inputText));
         });
 
         syntacticButton.addActionListener(e -> {
             String inputText = codeInputArea.getText();
-            outputArea.setText(inputText);
+            outputArea.setText(Compiler.runSyntacticAnalyzer(inputText));
         });
     }
 }

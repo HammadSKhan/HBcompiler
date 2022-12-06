@@ -19,7 +19,7 @@ public class SymbolTable {
 
 
     public Token add(Token token, String lexemeValue) {
-        SymbolTableEntry ste = checkEntries(lexemeValue);
+        SymbolTableEntry ste = findEntry(lexemeValue);
         if (ste == null) {
             ste = new SymbolTableEntry(entries.size(), token.getName().name(), lexemeValue);
             entries.add(ste);
@@ -27,7 +27,8 @@ public class SymbolTable {
         return new Token(token.getName(), ste.getAttributeValue() + "");
     }
 
-    public SymbolTableEntry checkEntries(String lexemeValue) {
+    // Checks whether entry is already in the SymbolTable or not
+    public SymbolTableEntry findEntry(String lexemeValue) {
         for (SymbolTableEntry entry : entries) {
             if ((Objects.equals(lexemeValue, entry.getLexemeValue()))) {
                 return entry;

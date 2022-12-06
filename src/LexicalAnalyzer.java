@@ -27,25 +27,35 @@ public class LexicalAnalyzer {
         return stringBuilder.toString();
     }
 
+    public ArrayList<Token> analyzeList() {
+        ArrayList<Token> tokenArrayList = new ArrayList<>();
+        Token token = getNextToken();
+        while (token != null) {
+            tokenArrayList.add(token);
+            token = getNextToken();
+        }
+        return tokenArrayList;
+    }
+
     Token recognizeKeywordAndId(String lexeme) {
         //Will return some token
         switch (lexeme.toLowerCase()) { // For case Insensitivity
             case "int":
-                return symbolTable.add(new Token(TokenName.INT),lexeme);
+                return symbolTable.add(new Token(TokenName.INT), lexeme);
             case "char":
-                return symbolTable.add(new Token(TokenName.CHAR),lexeme);
+                return symbolTable.add(new Token(TokenName.CHAR), lexeme);
             case "string":
-                return symbolTable.add(new Token(TokenName.STRING),lexeme);
+                return symbolTable.add(new Token(TokenName.STRING), lexeme);
             case "if":
-                return symbolTable.add(new Token(TokenName.IF),lexeme);
+                return symbolTable.add(new Token(TokenName.IF), lexeme);
             case "else":
-                return symbolTable.add(new Token(TokenName.ELSE),lexeme);
+                return symbolTable.add(new Token(TokenName.ELSE), lexeme);
             case "do":
-                return symbolTable.add(new Token(TokenName.DO),lexeme);
+                return symbolTable.add(new Token(TokenName.DO), lexeme);
             case "while":
-                return symbolTable.add(new Token(TokenName.WHILE),lexeme);
+                return symbolTable.add(new Token(TokenName.WHILE), lexeme);
             default:
-                return symbolTable.add(new Token(TokenName.ID),lexeme);
+                return symbolTable.add(new Token(TokenName.ID), lexeme);
         }
     }
 
@@ -133,7 +143,7 @@ public class LexicalAnalyzer {
                 stringBuilder.append(c);
             }
 //            Token tempSlToken= new Token(TokenName.SL, "\"" + stringBuilder + "\"");
-            return symbolTable.add(new Token(TokenName.SL),stringBuilder.toString());
+            return symbolTable.add(new Token(TokenName.SL), stringBuilder.toString());
         }
 
         // Token For ID
