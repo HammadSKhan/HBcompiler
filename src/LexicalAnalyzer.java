@@ -31,7 +31,9 @@ public class LexicalAnalyzer {
         ArrayList<Token> tokenArrayList = new ArrayList<>();
         Token token = getNextToken();
         while (token != null) {
-            tokenArrayList.add(token);
+            if (token.getName() != TokenName.COMMENT) {
+                tokenArrayList.add(token);
+            }
             token = getNextToken();
         }
         return tokenArrayList;

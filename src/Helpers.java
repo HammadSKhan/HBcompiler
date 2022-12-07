@@ -15,11 +15,10 @@ public class Helpers {
         return true;
     }
 
-
     //For Characters
     public static boolean isInteger(char c) {
         try {
-            Integer.parseInt(c+"");
+            Integer.parseInt(c + "");
         } catch (Exception e) {
             return false;
         }
@@ -28,7 +27,7 @@ public class Helpers {
     }
 
     public static boolean isAlpha(char c) {
-        if((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
             return true;
         }
         return false;
