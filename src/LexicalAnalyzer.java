@@ -1,6 +1,6 @@
-import Exceptions.Lexical.GeneralLexicalException;
-
 import java.util.ArrayList;
+
+import Exceptions.Lexical.GeneralLexicalException;
 
 public class LexicalAnalyzer {
     public final String inputText;
@@ -99,7 +99,6 @@ public class LexicalAnalyzer {
         }
     }
 
-
     Token getNextToken() throws GeneralLexicalException {
         char c = nextChar();
         //Ignore extra spaces
@@ -135,14 +134,13 @@ public class LexicalAnalyzer {
             }
         }
 
-
         // Token For String Literal
         if (c == '\"') {
             StringBuilder stringBuilder = new StringBuilder();
             while ((c = nextChar()) != '\"') {
                 stringBuilder.append(c);
             }
-//            Token tempSlToken= new Token(TokenName.SL, "\"" + stringBuilder + "\"");
+            //            Token tempSlToken= new Token(TokenName.SL, "\"" + stringBuilder + "\"");
             return symbolTable.add(new Token(TokenName.SL), stringBuilder.toString());
         }
 
@@ -152,8 +150,7 @@ public class LexicalAnalyzer {
             stringBuilder.append(c);
             c = nextChar();
             while (Helpers.isAlpha(c)
-                    || Helpers.isInteger(c)
-            ) {
+                    || Helpers.isInteger(c)) {
                 stringBuilder.append(c);
                 c = nextChar();
             }
@@ -172,7 +169,7 @@ public class LexicalAnalyzer {
             }
             if (!Helpers.isAlpha(c) || c == ' ') {
                 retractChar();
-                return new Token(TokenName.IV, stringBuilder.toString());
+                return symbolTable.add(new Token(TokenName.IV), stringBuilder.toString()); // new Token(TokenName.IV, stringBuilder.toString());
             } else {
                 throw new GeneralLexicalException(inputText, currentPointer);
             }
@@ -254,7 +251,6 @@ public class LexicalAnalyzer {
             return OopAop;
         }
 
-
         throw new GeneralLexicalException(inputText, currentPointer);
     }
 
@@ -266,7 +262,7 @@ public class LexicalAnalyzer {
             if (currentChar == '\n') {
                 currentLine++;
                 //testing
-//                currentPointer++;
+                //                currentPointer++;
             }
             return currentChar;
         } else {
@@ -284,7 +280,6 @@ public class LexicalAnalyzer {
             }
         }
     }
-
 
     Token checkAopOop(char c, ArrayList<Character> input) {
 
