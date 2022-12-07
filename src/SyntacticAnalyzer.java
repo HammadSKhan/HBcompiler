@@ -35,7 +35,7 @@ public class SyntacticAnalyzer {
 				input = getNextTerminal();
 			} else if (action.parsingAction == ParsingAction.reduce) {
 				ReduceValue rValue = parsingTable.getReduction(action.state);
-				for (int i = 0; i < rValue.count; i++) {
+				for (int i = 0; i < (rValue.count * 2); i++) {
 					inputStack.pop();
 				}
 				inputStack.push(rValue.nonTerminal);
