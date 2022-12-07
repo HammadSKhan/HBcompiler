@@ -43,6 +43,6 @@ public class Token {
 
     @Override
     public String toString() {
-        return "Token {" + "name=" + name + ", value='" + value + "'" + "}";
+        return "Token {" + "name=" + name + ", attributeValue='" + value + "'" + "}";
     }
 }

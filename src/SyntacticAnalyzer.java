@@ -31,14 +31,16 @@ public class SyntacticAnalyzer {
 			if (action.parsingAction == ParsingAction.shift) {
 				inputStack.push(input);
 				inputStack.push(action.state);
-
 				input = getNextTerminal();
 			} else if (action.parsingAction == ParsingAction.reduce) {
 				ReduceValue rValue = parsingTable.getReduction(action.state);
 				for (int i = 0; i < (rValue.count * 2); i++) {
 					inputStack.pop();
 				}
+				state = inputStack.peek();
 				inputStack.push(rValue.nonTerminal);
+				inputStack.push(parsingTable.getGoto(state,rValue.nonTerminal)+"");
+
 			} else if (action.parsingAction == ParsingAction.accept) {
 				break;
 			} else {
@@ -46,11 +48,15 @@ public class SyntacticAnalyzer {
 			}
 		}
 
-		return "Compilation Successfull ;)";
+		return "Compilation Successful ;)";
 	}
 
 	private String getNextTerminal() {
+		if(inputCounter>=inputBuffer.size()){
+			return "$";
+		}
 		Token input = inputBuffer.get(inputCounter);
+		inputCounter++;
 		if (input.getName() == TokenName.OOP || input.getName() == TokenName.AOP) {
 			return input.getValue(); // e.g. BO for bracket open
 		} else {
