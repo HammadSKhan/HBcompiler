@@ -34,5 +34,9 @@ public class MainWindow extends JFrame {
                 outputArea.setText(ex.getMessage());
             }
         });
+
+        exitButton.addActionListener(e -> {
+            this.dispose();
+        });
     }
 }

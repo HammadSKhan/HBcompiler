@@ -126,14 +126,16 @@ public class LexicalAnalyzer {
                 return new Token(TokenName.COMMENT);
             } else if (c == '*') {
                 while ((c = nextChar()) != '*' && (c = nextChar()) != '/') {
-                    System.out.println("NEXT CHAR =====" + c);
+//                    System.out.println("NEXT CHAR =====" + c);
                     //
                 }
                 // Error fix: read next char if c = new line AND returning COMMENT Token
                 c = nextChar();
                 return new Token(TokenName.COMMENT);
             } else {
-                throw new LexicalException(inputText, currentPointer, currentLine);
+//                throw new LexicalException(inputText, currentPointer, currentLine);
+//                retractChar();
+                return recognizeEverythingElse("/");
             }
         }
 
@@ -269,7 +271,7 @@ public class LexicalAnalyzer {
         }
     }
 
-    void retractChar() {
+    char retractChar() {
         if (currentPointer < inputText.length()) {
             currentPointer--;
             char currentChar = inputText.charAt(currentPointer);
@@ -277,6 +279,7 @@ public class LexicalAnalyzer {
                 currentLine--;
             }
         }
+        return inputText.charAt(currentPointer);
     }
 
     Token checkAopOop(char c, ArrayList<Character> input) {
