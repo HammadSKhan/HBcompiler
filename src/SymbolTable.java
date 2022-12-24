@@ -17,7 +17,6 @@ public class SymbolTable {
         ));
     }
 
-
     public Token add(Token token, String lexemeValue) {
         SymbolTableEntry ste = findEntry(lexemeValue);
         if (ste == null) {
@@ -35,6 +34,26 @@ public class SymbolTable {
             }
         }
         return null;
+    }
+
+    public SymbolTableEntry getEntry(int attributeValue){
+        for (SymbolTableEntry entry : entries) {
+            if (entry.getAttributeValue() == attributeValue) {
+                return entry;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (SymbolTableEntry entry : entries) {
+            stringBuilder.append(entry.getAttributeValue() + "\t\t" + entry.getTokenName() + "\t" + " \t  - " + "\t" + entry.getLexemeValue() + "\n");
+        }
+        return "SymbolTable:\n" +
+                "Attribute Value\t" + "Token Name\t" + "\tType\t" + "Value\n" +
+                stringBuilder;
     }
 }
 

@@ -9,11 +9,6 @@ public class SymbolTableEntry {
         this.attributeValue = attributeValue;
     }
 
-//    public SymbolTableEntry(int attributeValue, String tokenName) {
-//        this.attributeValue = attributeValue;
-//        this.tokenName = tokenName;
-//    }
-
     public String getLexemeValue() {
         return lexemeValue;
     }

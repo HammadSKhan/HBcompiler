@@ -1,6 +1,7 @@
-import java.util.ArrayList;
+import Exceptions.Lexical.LexicalException;
 
-import Exceptions.Lexical.GeneralLexicalException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LexicalAnalyzer {
     public final String inputText;
@@ -101,7 +102,7 @@ public class LexicalAnalyzer {
         }
     }
 
-    Token getNextToken() throws GeneralLexicalException {
+    Token getNextToken() throws LexicalException {
         char c = nextChar();
         //Ignore extra spaces
         if (c == ' ' || c == '\n') {
@@ -128,11 +129,11 @@ public class LexicalAnalyzer {
                     System.out.println("NEXT CHAR =====" + c);
                     //
                 }
-                // Error fix temp: read next char if c = new line AND returning COMMENT Token
+                // Error fix: read next char if c = new line AND returning COMMENT Token
                 c = nextChar();
                 return new Token(TokenName.COMMENT);
             } else {
-                throw new GeneralLexicalException(inputText, currentPointer);
+                throw new LexicalException(inputText, currentPointer, currentLine);
             }
         }
 
@@ -142,7 +143,6 @@ public class LexicalAnalyzer {
             while ((c = nextChar()) != '\"') {
                 stringBuilder.append(c);
             }
-            //            Token tempSlToken= new Token(TokenName.SL, "\"" + stringBuilder + "\"");
             return symbolTable.add(new Token(TokenName.SL), stringBuilder.toString());
         }
 
@@ -173,7 +173,7 @@ public class LexicalAnalyzer {
                 retractChar();
                 return symbolTable.add(new Token(TokenName.IV), stringBuilder.toString()); // new Token(TokenName.IV, stringBuilder.toString());
             } else {
-                throw new GeneralLexicalException(inputText, currentPointer);
+                throw new LexicalException(inputText, currentPointer, currentLine, List.of("Non Alpha", "Or Integer"));
             }
         }
 
@@ -193,7 +193,7 @@ public class LexicalAnalyzer {
                     return recognizeEverythingElse(stringBuilder.toString());
                 }
             } else {
-                throw new GeneralLexicalException(inputText, currentPointer);
+                throw new LexicalException(inputText, currentPointer, currentLine, List.of("=", "or Alpha or Integer"));
             }
         }
 
@@ -213,7 +213,7 @@ public class LexicalAnalyzer {
                     return recognizeEverythingElse(stringBuilder.toString());
                 }
             } else {
-                throw new GeneralLexicalException(inputText, currentPointer);
+                throw new LexicalException(inputText, currentPointer, currentLine, List.of(" = ", " or >", " or Alpha or Integer"));
             }
         }
 
@@ -233,7 +233,7 @@ public class LexicalAnalyzer {
                     return recognizeEverythingElse(stringBuilder.toString());
                 }
             } else {
-                throw new GeneralLexicalException(inputText, currentPointer);
+                throw new LexicalException(inputText, currentPointer, currentLine, List.of("=", "or Alpha or Integer"));
             }
         }
 
@@ -253,18 +253,15 @@ public class LexicalAnalyzer {
             return OopAop;
         }
 
-        throw new GeneralLexicalException(inputText, currentPointer);
+        throw new LexicalException(inputText, currentPointer, currentLine);
     }
 
     char nextChar() {
         if (currentPointer < inputText.length()) {
             char currentChar = inputText.charAt(currentPointer);
-            System.out.println("Next char inputting = " + currentChar);
             currentPointer++;
             if (currentChar == '\n') {
                 currentLine++;
-                //testing
-                //                currentPointer++;
             }
             return currentChar;
         } else {
@@ -275,7 +272,6 @@ public class LexicalAnalyzer {
     void retractChar() {
         if (currentPointer < inputText.length()) {
             currentPointer--;
-            System.out.println("Retracting = " + inputText.charAt(currentPointer));
             char currentChar = inputText.charAt(currentPointer);
             if (currentChar == '\n') {
                 currentLine--;
@@ -288,13 +284,7 @@ public class LexicalAnalyzer {
         if (input.contains(c)) {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(c);
-            c = nextChar();
-            if (Helpers.isAlpha(c) || Helpers.isInteger(c) || c == ' ' || c == '\n') {
-                retractChar();
-                return recognizeEverythingElse(stringBuilder.toString());
-            } else {
-                throw new GeneralLexicalException(inputText, currentPointer);
-            }
+            return recognizeEverythingElse(stringBuilder.toString());
         }
         return null;
     }
