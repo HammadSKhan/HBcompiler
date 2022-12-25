@@ -1,5 +1,5 @@
 import Exceptions.Lexical.LexicalException;
-import Exceptions.Lexical.LexicalUnexpectedEndOfFIle;
+import Exceptions.Lexical.LexicalUnexpectedEnd;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ public class LexicalAnalyzer {
     public SymbolTable symbolTable;
 
     public LexicalAnalyzer(String inputText) {
-        this.inputText = inputText + ' ';
+        this.inputText = inputText + " ";
         this.currentPointer = 0;
         this.currentLine = 1;
         this.symbolTable = new SymbolTable();
@@ -67,37 +67,37 @@ public class LexicalAnalyzer {
         //Will return some token
         switch (lexeme.toLowerCase()) { // For case Insensitivity
             case "<":
-                return new Token(TokenName.ROP, TokenValue.LT);
+                return new Token(TokenName.ROP, TokenValue.LT, lexeme);
             case "<=":
-                return new Token(TokenName.ROP, TokenValue.LE);
+                return new Token(TokenName.ROP, TokenValue.LE, lexeme);
             case "==":
-                return new Token(TokenName.ROP, TokenValue.EQ);
+                return new Token(TokenName.ROP, TokenValue.EQ, lexeme);
             case "<>":
-                return new Token(TokenName.ROP, TokenValue.NE);
+                return new Token(TokenName.ROP, TokenValue.NE, lexeme);
             case ">=":
-                return new Token(TokenName.ROP, TokenValue.GE);
+                return new Token(TokenName.ROP, TokenValue.GE, lexeme);
             case ">":
-                return new Token(TokenName.ROP, TokenValue.GT);
+                return new Token(TokenName.ROP, TokenValue.GT, lexeme);
             case "+":
-                return new Token(TokenName.AOP, TokenValue.AD);
+                return new Token(TokenName.AOP, TokenValue.AD, lexeme);
             case "-":
-                return new Token(TokenName.AOP, TokenValue.SB);
+                return new Token(TokenName.AOP, TokenValue.SB, lexeme);
             case "*":
-                return new Token(TokenName.AOP, TokenValue.ML);
+                return new Token(TokenName.AOP, TokenValue.ML, lexeme);
             case "/":
-                return new Token(TokenName.AOP, TokenValue.DV);
+                return new Token(TokenName.AOP, TokenValue.DV, lexeme);
             case "=":
-                return new Token(TokenName.OOP, TokenValue.AS);
+                return new Token(TokenName.OOP, TokenValue.AS, lexeme);
             case "(":
-                return new Token(TokenName.OOP, TokenValue.OP);
+                return new Token(TokenName.OOP, TokenValue.OP, lexeme);
             case ")":
-                return new Token(TokenName.OOP, TokenValue.CP);
+                return new Token(TokenName.OOP, TokenValue.CP, lexeme);
             case "{":
-                return new Token(TokenName.OOP, TokenValue.OB);
+                return new Token(TokenName.OOP, TokenValue.OB, lexeme);
             case "}":
-                return new Token(TokenName.OOP, TokenValue.CB);
+                return new Token(TokenName.OOP, TokenValue.CB, lexeme);
             case ";":
-                return new Token(TokenName.OOP, TokenValue.TR);
+                return new Token(TokenName.OOP, TokenValue.TR, lexeme);
             default:
                 return null;
         }
@@ -128,7 +128,7 @@ public class LexicalAnalyzer {
             } else if (c == '*') {
                 while ((c = nextChar()) != '*' && (c = nextChar()) != '/') {
                     if(c == Helpers.EOF){
-                        throw new LexicalUnexpectedEndOfFIle(currentLine, "*/");
+                        throw new LexicalUnexpectedEnd(currentLine, "*/");
                     }
 //                    System.out.println("NEXT CHAR =====" + c);
                     //
@@ -147,11 +147,13 @@ public class LexicalAnalyzer {
         if (c == '\"') {
             StringBuilder stringBuilder = new StringBuilder();
             while ((c = nextChar()) != '\"') {
+               if(c == Helpers.EOF){
+                   throw new LexicalUnexpectedEnd(currentLine,"\"");
+               }
                 stringBuilder.append(c);
             }
             return symbolTable.add(new Token(TokenName.SL), stringBuilder.toString());
         }
-
         // Token For ID
         if (Helpers.isAlpha(c)) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -263,7 +265,7 @@ public class LexicalAnalyzer {
     }
 
     char nextChar() {
-        if (currentPointer < inputText.length()) {
+        if (currentPointer < inputText.length()-1) {
             char currentChar = inputText.charAt(currentPointer);
             currentPointer++;
             if (currentChar == '\n') {

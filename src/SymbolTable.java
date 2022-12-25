@@ -23,7 +23,7 @@ public class SymbolTable {
             ste = new SymbolTableEntry(entries.size(), token.getName().name(), lexemeValue);
             entries.add(ste);
         }
-        return new Token(token.getName(), ste.getAttributeValue() + "");
+        return new Token(token.getName(), ste.getAttributeValue() + "", ste.getLexemeValue());
     }
 
     // Checks whether entry is already in the SymbolTable or not

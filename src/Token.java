@@ -12,19 +12,22 @@ public class Token {
 
     private final TokenName name;
     private String value;
+    private String lexeme;
 
     public Token(TokenName name) {
         this.name = name;
     }
 
-    public Token(TokenName name, String value) {
+    public Token(TokenName name, String value, String lexeme) {
         this.name = name;
         this.value = value;
+        this.lexeme = lexeme;
     }
 
-    public Token(TokenName name, TokenValue value) {
+    public Token(TokenName name, TokenValue value, String lexeme) {
         this.name = name;
         this.value = value.name();
+        this.lexeme = lexeme;
     }
 
     /**
@@ -43,6 +46,6 @@ public class Token {
 
     @Override
     public String toString() {
-        return "Token {" + "name=" + name + ", attributeValue='" + value + "'" + "}";
+        return "Token {" + "name= " + name + " , attributeValue= '" + value + "'"  + "}" + " , lexeme= '" + lexeme + "' ";
     }
 }
