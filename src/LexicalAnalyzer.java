@@ -1,4 +1,5 @@
 import Exceptions.Lexical.LexicalException;
+import Exceptions.Lexical.LexicalUnexpectedEndOfFIle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,8 +106,8 @@ public class LexicalAnalyzer {
     Token getNextToken() throws LexicalException {
         char c = nextChar();
         //Ignore extra spaces
-        if (c == ' ' || c == '\n') {
-            while ((c = nextChar()) == ' ' || c == '\n') {
+        if (c == ' ' || c == '\n' || c == '\t') {
+            while ((c = nextChar()) == ' ' || c == '\n' || c == '\t') {
                 //
             }
         }
@@ -119,13 +120,16 @@ public class LexicalAnalyzer {
         if (c == '/') {
             c = nextChar();
             if (c == '/') {
-                while ((c = nextChar()) != '\n') {
+                while ((c = nextChar()) != '\n' && c != Helpers.EOF) {
                     //
                 }
                 // Error fix temp: Returning COMMENT Token
                 return new Token(TokenName.COMMENT);
             } else if (c == '*') {
                 while ((c = nextChar()) != '*' && (c = nextChar()) != '/') {
+                    if(c == Helpers.EOF){
+                        throw new LexicalUnexpectedEndOfFIle(currentLine, "*/");
+                    }
 //                    System.out.println("NEXT CHAR =====" + c);
                     //
                 }
